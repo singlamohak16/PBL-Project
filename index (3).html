@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clothes & Closet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FAF7F2;
+      --warm:  #F0E9DC;
+      --sand:  #D4C4A8;
+      --clay:  #B8956A;
+      --bark:  #6B4E35;
+      --ink:   #1A1512;
+      --moss:  #4A5E44;
+      --rose:  #C4726E;
+      --tag:   #E8F0E8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,242,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700;
+      color: var(--ink); text-decoration: none; cursor: pointer;
+    }
+    .nav-logo span { color: var(--clay); font-style: italic; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      text-decoration: none; color: var(--ink); font-size: 0.875rem;
+      font-weight: 500; opacity: 0.6; transition: opacity .2s; cursor: pointer;
+    }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; }
+    .nav-closet-btn {
+      background: var(--ink); color: var(--cream); border: none; border-radius: 100px;
+      padding: 9px 22px; font-size: 0.875rem; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background .2s;
+    }
+    .nav-closet-btn:hover { background: var(--bark); }
+    .closet-count {
+      background: var(--clay); color: #fff; border-radius: 50%;
+      width: 20px; height: 20px; display: inline-flex;
+      align-items: center; justify-content: center; font-size: .7rem; font-weight: 700;
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; animation: fadeIn .35s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ════ HOME ════ */
+    .hero {
+      padding: 80px 48px 60px; display: grid;
+      grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: .75rem; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--clay); margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: 3.5rem;
+      line-height: 1.1; font-weight: 700; margin-bottom: 24px;
+    }
+    .hero-title em { color: var(--clay); font-style: italic; }
+    .hero-desc { font-size: 1rem; line-height: 1.7; color: #5a5048; margin-bottom: 36px; }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--ink); color: var(--cream); border: none; border-radius: 100px;
+      padding: 14px 32px; font-size: .9rem; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--bark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--ink); border: 1.5px solid var(--sand);
+      border-radius: 100px; padding: 13px 32px; font-size: .9rem;
+      font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer;
+      transition: border-color .2s, transform .15s;
+    }
+    .btn-secondary:hover { border-color: var(--ink); transform: translateY(-1px); }
+    .hero-mosaic {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      border-radius: 24px; overflow: hidden;
+    }
+    .hero-mosaic-img {
+      overflow: hidden; height: 200px;
+    }
+    .hero-mosaic-img.tall { height: 260px; }
+    .hero-mosaic-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s ease; display: block;
+    }
+    .hero-mosaic-img:hover img { transform: scale(1.05); }
+
+    /* features */
+    .features { background: var(--warm); padding: 72px 48px; }
+    .features-inner { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      text-align: center; font-size: .75rem; font-weight: 600;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--clay); margin-bottom: 12px;
+    }
+    .section-title {
+      text-align: center; font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; margin-bottom: 48px;
+    }
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .feature-card {
+      background: var(--cream); border-radius: 20px; padding: 32px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 14px; background: var(--warm);
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+    .feature-card p { font-size: .875rem; color: #6b5f55; line-height: 1.6; }
+
+    /* ════ SHOP ════ */
+    .shop-header { padding: 48px 48px 24px; max-width: 1200px; margin: 0 auto; }
+    .shop-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 8px; }
+    .shop-header p { color: #6b5f55; margin-bottom: 28px; }
+    .category-tabs { display: flex; gap: 10px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 8px 20px; border-radius: 100px; border: 1.5px solid var(--sand);
+      background: transparent; color: var(--ink); font-family: 'DM Sans', sans-serif;
+      font-size: .875rem; cursor: pointer; transition: all .2s;
+    }
+    .tab-btn:hover, .tab-btn.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+      gap: 28px; padding: 32px 48px; max-width: 1200px; margin: 0 auto;
+    }
+    .product-card {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      transition: transform .25s, box-shadow .25s; cursor: default;
+    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,.13); }
+    .product-img-wrap { position: relative; height: 300px; overflow: hidden; background: var(--warm); }
+    .product-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s ease; display: block;
+    }
+    .product-card:hover .product-img-wrap img { transform: scale(1.06); }
+    .product-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(255,255,255,.92); border-radius: 8px;
+      padding: 4px 10px; font-size: .7rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--moss);
+    }
+    .product-info { padding: 16px 20px 20px; }
+    .product-name { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+    .product-desc { font-size: .8rem; color: #7a6f65; margin-bottom: 14px; line-height: 1.5; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { font-weight: 700; font-size: 1.05rem; color: var(--bark); }
+    .add-btn {
+      background: var(--ink); color: #fff; border: none; border-radius: 10px;
+      padding: 9px 18px; font-size: .8rem; font-family: 'DM Sans', sans-serif;
+      font-weight: 500; cursor: pointer; transition: background .2s, transform .15s;
+    }
+    .add-btn:hover { background: var(--bark); transform: scale(1.04); }
+    .add-btn.added { background: var(--moss); }
+
+    /* ════ CLOSET ════ */
+    .closet-header {
+      padding: 48px 48px 0; max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .closet-header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; }
+    .clear-btn {
+      background: transparent; color: var(--rose); border: 1.5px solid var(--rose);
+      border-radius: 100px; padding: 8px 18px; font-size: .8rem;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s;
+    }
+    .clear-btn:hover { background: var(--rose); color: #fff; }
+    .closet-summary {
+      background: var(--warm); border-radius: 20px; padding: 24px 32px;
+      margin: 24px auto 0; max-width: 1104px; display: flex; align-items: center; gap: 48px;
+    }
+    .summary-item { text-align: center; }
+    .summary-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--bark); }
+    .summary-label { font-size: .8rem; color: #7a6f65; margin-top: 2px; }
+    .closet-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+      gap: 20px; padding: 24px 48px 48px; max-width: 1200px; margin: 0 auto;
+    }
+    .closet-card {
+      background: #fff; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06); position: relative; transition: transform .2s;
+    }
+    .closet-card:hover { transform: translateY(-3px); }
+    .closet-card-img { height: 200px; overflow: hidden; }
+    .closet-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .closet-card-info { padding: 14px 16px; }
+    .closet-card-name { font-weight: 600; font-size: .9rem; margin-bottom: 2px; }
+    .closet-card-price { font-size: .85rem; color: var(--bark); font-weight: 500; }
+    .remove-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255,255,255,.95); border: none; border-radius: 50%;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: .9rem; box-shadow: 0 2px 8px rgba(0,0,0,.12); transition: background .2s;
+    }
+    .remove-btn:hover { background: #fee2e2; }
+    .closet-empty { padding: 80px 48px; text-align: center; color: #9a8f85; }
+    .closet-empty .empty-icon { font-size: 4rem; margin-bottom: 16px; }
+    .closet-empty h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 8px; color: var(--ink); }
+    .closet-empty p { margin-bottom: 24px; }
+
+    /* ════ TRY-ON ════ */
+    .tryon-layout {
+      display: grid; grid-template-columns: 290px 1fr;
+      gap: 32px; padding: 40px 48px; max-width: 1200px; margin: 0 auto;
+    }
+    .tryon-sidebar h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 6px; }
+    .tryon-sidebar > p { font-size: .85rem; color: #7a6f65; margin-bottom: 20px; line-height: 1.5; }
+    .tryon-items { display: flex; flex-direction: column; gap: 12px; }
+    .tryon-item {
+      background: #fff; border-radius: 14px; overflow: hidden;
+      display: flex; align-items: center; gap: 0;
+      cursor: pointer; border: 2px solid transparent;
+      transition: all .2s; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .tryon-item:hover, .tryon-item.selected { border-color: var(--clay); }
+    .tryon-item-thumb { width: 68px; height: 68px; object-fit: cover; flex-shrink: 0; display: block; }
+    .tryon-item-info { padding: 0 14px; }
+    .tryon-item-name { font-size: .875rem; font-weight: 600; }
+    .tryon-item-cat { font-size: .75rem; color: #9a8f85; }
+
+    .tryon-stage { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.09); }
+    .camera-view {
+      width: 100%; height: 520px; display: flex; align-items: center; justify-content: center;
+      background: #0f0e0d; position: relative; overflow: hidden;
+    }
+    #webcam { width: 100%; height: 100%; object-fit: cover; display: none; transform: scaleX(-1); }
+    #canvas-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; transform: scaleX(-1);
+    }
+    .overlay-garment {
+      position: absolute; pointer-events: none; display: none;
+      transition: left .05s linear, top .05s linear, width .05s linear, height .05s linear;
+      transform-origin: top center;
+    }
+    .overlay-garment img {
+      width: 100%; height: 100%;
+      object-fit: fill;   /* stretch to fill exactly — we compute the correct box */
+      opacity: 0.92;
+      display: block;
+    }
+    .camera-placeholder { text-align: center; color: rgba(255,255,255,.75); padding: 20px; }
+    .camera-placeholder .big-icon { font-size: 4rem; margin-bottom: 16px; }
+    .camera-placeholder h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .camera-placeholder p { font-size: .85rem; opacity: .6; max-width: 260px; line-height: 1.5; margin: 0 auto; }
+    .mediapipe-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(0,0,0,.5); color: #fff; border-radius: 8px;
+      padding: 5px 12px; font-size: .7rem; backdrop-filter: blur(4px);
+    }
+    .loading-overlay {
+      position: absolute; inset: 0; background: rgba(15,14,13,.85);
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px; color: #fff;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,.2); border-top-color: var(--clay);
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .camera-controls {
+      padding: 20px 24px; display: flex; align-items: center;
+      justify-content: space-between; background: var(--cream); border-top: 1px solid var(--sand);
+    }
+    .ctrl-btn {
+      display: flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: .875rem; font-weight: 500; cursor: pointer; border: none;
+    }
+    .ctrl-start { background: var(--ink); color: #fff; }
+    .ctrl-start:hover { background: var(--bark); }
+    .ctrl-stop { background: var(--rose); color: #fff; display: none; }
+    .ctrl-stop:hover { opacity: .85; }
+    .tryon-tip { font-size: .8rem; color: #9a8f85; max-width: 320px; line-height: 1.4; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ink); color: #fff; border-radius: 100px;
+      padding: 12px 28px; font-size: .875rem; font-weight: 500;
+      z-index: 9999; transition: transform .3s ease; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .hero { grid-template-columns: 1fr; padding: 40px 20px; }
+      .hero-mosaic { display: none; }
+      .features { padding: 48px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .shop-header { padding: 32px 20px 20px; }
+      .products-grid { padding: 20px; }
+      .closet-header { padding: 32px 20px 0; }
+      .closet-summary { margin: 20px; }
+      .closet-grid { padding: 20px; }
+      .tryon-layout { grid-template-columns: 1fr; padding: 20px; }
+      .tryon-items { flex-direction: row; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo" onclick="showPage('home')"><span>C</span>lothes <span>&</span> Closet</span>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+    <a onclick="showPage('shop')" id="nav-shop">Shop</a>
+    <a onclick="showPage('tryon')" id="nav-tryon">Try-On</a>
+  </div>
+  <button class="nav-closet-btn" onclick="showPage('closet')">
+    👗 My Closet <span class="closet-count" id="closet-count">0</span>
+  </button>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div>
+      <p class="hero-eyebrow">Virtual Fashion Platform</p>
+      <h1 class="hero-title">Wear it before<br/>you <em>buy it.</em></h1>
+      <p class="hero-desc">Browse curated collections, build your digital wardrobe, and try on clothes in real-time using your webcam. Fashion meets technology — all in your browser.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('shop')">Explore Collection</button>
+        <button class="btn-secondary" onclick="showPage('tryon')">▶ Try On Live</button>
+      </div>
+    </div>
+    <div class="hero-mosaic">
+      <div class="hero-mosaic-img tall">
+        <img src="hoodie1.png" alt="hoodie" loading="lazy"/>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="hero-mosaic-img" style="height:150px;">
+          <img src="shirt1.png" alt="shirt" loading="lazy"/>
+        </div>
+        <div class="hero-mosaic-img" style="height:150px;">
+          <img src="t1.jpg" alt="tshirt" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="features">
+    <div class="features-inner">
+      <p class="section-label">What We Offer</p>
+      <h2 class="section-title">Everything you need to shop smarter</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🛍️</div>
+          <h3>Category Browsing</h3>
+          <p>Explore shirts, hoodies, t-shirts and more — with real product photos for every item.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👗</div>
+          <h3>Virtual Closet</h3>
+          <p>Save pieces you love to your digital wardrobe. Compare outfits before you buy.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎥</div>
+          <h3>Live Try-On</h3>
+          <p>MediaPipe pose detection overlays real garment images on your body through your webcam.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div id="page-shop" class="page">
+  <div class="shop-header">
+    <h1>Browse Collection</h1>
+    <p>Curated wardrobe essentials for every season.</p>
+    <div class="category-tabs">
+      <button class="tab-btn active" onclick="filterProducts('all',this)">All</button>
+      <button class="tab-btn" onclick="filterProducts('shirts',this)">Shirts</button>
+      <button class="tab-btn" onclick="filterProducts('hoodies',this)">Hoodies</button>
+      <button class="tab-btn" onclick="filterProducts('tshirts',this)">T-Shirts</button>
+    </div>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</div>
+
+<!-- CLOSET -->
+<div id="page-closet" class="page">
+  <div class="closet-header">
+    <div>
+      <h1>My Closet</h1>
+      <p style="color:#7a6f65;font-size:.9rem;margin-top:4px">Your saved pieces</p>
+    </div>
+    <button class="clear-btn" onclick="clearCloset()">Clear All</button>
+  </div>
+  <div id="closet-content"></div>
+</div>
+
+<!-- TRY-ON -->
+<div id="page-tryon" class="page">
+  <div class="tryon-layout">
+    <div class="tryon-sidebar">
+      <h2>Virtual Try-On</h2>
+      <p>Select a garment, start your camera, and see the real clothing image overlaid on you using pose detection.</p>
+      <div class="tryon-items" id="tryon-items"></div>
+    </div>
+    <div class="tryon-stage">
+      <div class="camera-view" id="camera-view">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="canvas-overlay"></canvas>
+        <div class="overlay-garment" id="overlay-garment"><img id="overlay-img" src="" alt="garment"/></div>
+        <div class="loading-overlay" id="loading-overlay">
+          <div class="spinner"></div>
+          <span style="font-size:.9rem">Loading pose detection…</span>
+        </div>
+        <div id="camera-placeholder" class="camera-placeholder">
+          <div class="big-icon">📸</div>
+          <h3>Start your camera</h3>
+          <p>Enable webcam to try on selected garments with live pose tracking.</p>
+        </div>
+        <div class="mediapipe-badge">⚡ MediaPipe Pose</div>
+      </div>
+      <div class="camera-controls">
+        <span class="tryon-tip" id="tryon-tip">Select a garment, then start your camera.</span>
+        <div style="display:flex;gap:10px;">
+          <button class="ctrl-btn ctrl-start" id="btn-start-cam" onclick="startCamera()">📷 Start Camera</button>
+          <button class="ctrl-btn ctrl-stop" id="btn-stop-cam" onclick="stopCamera()">⏹ Stop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/pose.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+
+<script>
+// ── PRODUCT DATA — using uploaded images ──
+const PRODUCTS = [
+  // SHIRTS
+  { id:1,  name:'Diamond Weave Shirt',    cat:'shirts',  price:1299,
+    img:'shirt1.png',
+    desc:'Dark allover print with subtle diamond pattern. Rich formal look.' },
+  { id:2,  name:'Navy Slim Shirt',        cat:'shirts',  price:1099,
+    img:'shirt2.png',
+    desc:'Deep navy with contrast cuff detail. Sharp slim-fit silhouette.' },
+  { id:3,  name:'Sky Blue Formal Shirt',  cat:'shirts',  price:999,
+    img:'shirt3.png',
+    desc:'Light blue classic formal with chest pocket. Everyday elegance.' },
+
+  // HOODIES
+  { id:4,  name:'Army Sherpa Hoodie',     cat:'hoodies', price:1899,
+    img:'hoodie1.png',
+    desc:'Military green with plush sherpa lining. Cozy winter essential.' },
+  { id:5,  name:'Graphic Print Hoodie',   cat:'hoodies', price:1699,
+    img:'hoodie2.png',
+    desc:'Bold side lettering, dual-tone construction. Statement streetwear.' },
+  { id:6,  name:'New York USA Hoodie',    cat:'hoodies', price:1799,
+    img:'hoodie3.png',
+    desc:'Classic collegiate arch print on warm sand colourway.' },
+
+  // T-SHIRTS
+  { id:7,  name:'Flame Panel Oversized Tee', cat:'tshirts', price:799,
+    img:'t1.jpg',
+    desc:'Black with white flame graphic. Bold, oversized drop-shoulder cut.' },
+  { id:8,  name:'White Essential Tee',    cat:'tshirts', price:499,
+    img:'t2.png',
+    desc:'Clean white heavyweight tee. The perfect blank canvas outfit.' },
+  { id:9,  name:'Plaid Flannel Overshirt', cat:'tshirts', price:1199,
+    img:'t3.png',
+    desc:'Blue plaid flannel with relaxed fit. Layering staple for cooler days.' },
+];
+
+// ── TRY-ON ITEMS — one from each category ──
+const TRYON_ITEMS = [
+  { id:1,  name:'Diamond Weave Shirt',    cat:'Shirt',    anchor:'torso', img:'shirt1.png' },
+  { id:2,  name:'Navy Slim Shirt',        cat:'Shirt',    anchor:'torso', img:'shirt2.png' },
+  { id:3,  name:'Sky Blue Formal',        cat:'Shirt',    anchor:'torso', img:'shirt3.png' },
+  { id:4,  name:'Army Sherpa Hoodie',     cat:'Hoodie',   anchor:'torso', img:'hoodie1.png' },
+  { id:5,  name:'Graphic Print Hoodie',   cat:'Hoodie',   anchor:'torso', img:'hoodie2.png' },
+  { id:6,  name:'New York Hoodie',        cat:'Hoodie',   anchor:'torso', img:'hoodie3.png' },
+  { id:7,  name:'Flame Panel Tee',        cat:'T-Shirt',  anchor:'torso', img:'t1.jpg' },
+  { id:8,  name:'White Essential Tee',    cat:'T-Shirt',  anchor:'torso', img:'t2.png' },
+  { id:9,  name:'Plaid Flannel Overshirt',cat:'T-Shirt',  anchor:'torso', img:'t3.png' },
+];
+
+let closet = JSON.parse(localStorage.getItem('cc_closet') || '[]');
+let currentFilter = 'all';
+let selectedTryon = null;
+let cameraStream = null;
+let poseRunning = false;
+let mpCam = null;
+
+// ── NAV ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById('nav-' + id);
+  if (el) el.classList.add('active');
+  if (id === 'shop')   renderProducts();
+  if (id === 'closet') renderCloset();
+  if (id === 'tryon')  renderTryonItems();
+}
+
+// ── SHOP ──
+function filterProducts(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function renderProducts() {
+  const grid = document.getElementById('products-grid');
+  const list = currentFilter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === currentFilter);
+  grid.innerHTML = list.map(p => {
+    const saved = closet.some(c => c.id === p.id);
+    return `<div class="product-card">
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" />
+        <span class="product-badge">${p.cat}</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <span class="product-price">₹${p.price.toLocaleString()}</span>
+          <button class="add-btn ${saved?'added':''}" onclick="toggleCloset(${p.id})">
+            ${saved ? '✓ Saved' : '+ Save'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCloset(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  const idx = closet.findIndex(c => c.id === id);
+  if (idx === -1) { closet.push(p); showToast(`"${p.name}" saved to closet!`); }
+  else            { closet.splice(idx, 1); showToast('Removed from closet.'); }
+  saveCloset(); renderProducts();
+}
+
+function saveCloset() {
+  localStorage.setItem('cc_closet', JSON.stringify(closet));
+  document.getElementById('closet-count').textContent = closet.length;
+}
+
+// ── CLOSET ──
+function renderCloset() {
+  const el = document.getElementById('closet-content');
+  if (!closet.length) {
+    el.innerHTML = `<div class="closet-empty">
+      <div class="empty-icon">👗</div>
+      <h3>Your closet is empty</h3>
+      <p>Browse the collection and save pieces you love.</p>
+      <button class="btn-primary" onclick="showPage('shop')">Browse Collection</button>
+    </div>`; return;
+  }
+  const total = closet.reduce((s,p) => s + p.price, 0);
+  el.innerHTML = `
+    <div class="closet-summary">
+      <div class="summary-item"><div class="summary-num">${closet.length}</div><div class="summary-label">Items saved</div></div>
+      <div class="summary-item"><div class="summary-num">₹${total.toLocaleString()}</div><div class="summary-label">Total value</div></div>
+      <div class="summary-item"><div class="summary-num">${[...new Set(closet.map(c=>c.cat))].length}</div><div class="summary-label">Categories</div></div>
+    </div>
+    <div class="closet-grid">
+      ${closet.map(p=>`<div class="closet-card">
+        <div class="closet-card-img"><img src="${p.img}" alt="${p.name}" loading="lazy"/></div>
+        <div class="closet-card-info">
+          <div class="closet-card-name">${p.name}</div>
+          <div class="closet-card-price">₹${p.price.toLocaleString()}</div>
+        </div>
+        <button class="remove-btn" onclick="removeFromCloset(${p.id})">✕</button>
+      </div>`).join('')}
+    </div>`;
+}
+
+function removeFromCloset(id) {
+  closet = closet.filter(c => c.id !== id);
+  saveCloset(); renderCloset();
+}
+
+function clearCloset() {
+  if (!closet.length) return;
+  closet = []; saveCloset(); renderCloset(); showToast('Closet cleared.');
+}
+
+// ── TRY-ON ──
+function renderTryonItems() {
+  document.getElementById('tryon-items').innerHTML = TRYON_ITEMS.map(t => `
+    <div class="tryon-item ${selectedTryon?.id===t.id?'selected':''}" onclick="selectTryon(${t.id})">
+      <img class="tryon-item-thumb" src="${t.img}" alt="${t.name}" loading="lazy"/>
+      <div class="tryon-item-info">
+        <div class="tryon-item-name">${t.name}</div>
+        <div class="tryon-item-cat">${t.cat}</div>
+      </div>
+    </div>`).join('');
+}
+
+function selectTryon(id) {
+  selectedTryon = TRYON_ITEMS.find(t => t.id === id);
+  renderTryonItems();
+  document.getElementById('tryon-tip').textContent =
+    `Selected: ${selectedTryon.name} — Start camera to try it on.`;
+  document.getElementById('overlay-img').src = selectedTryon.img;
+  if (poseRunning) document.getElementById('overlay-garment').style.display = 'block';
+}
+
+async function startCamera() {
+  if (!selectedTryon) { showToast('Please select a garment first!'); return; }
+  try {
+    document.getElementById('loading-overlay').style.display = 'flex';
+    cameraStream = await navigator.mediaDevices.getUserMedia({ video:{ width:1280, height:720 } });
+    const video = document.getElementById('webcam');
+    video.srcObject = cameraStream; video.style.display = 'block';
+    document.getElementById('camera-placeholder').style.display = 'none';
+    await new Promise(r => video.onloadedmetadata = r);
+
+    const canvas = document.getElementById('canvas-overlay');
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+
+    poseRunning = true;
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('btn-start-cam').style.display = 'none';
+    document.getElementById('btn-stop-cam').style.display = 'flex';
+    document.getElementById('tryon-tip').textContent = '🎯 Pose detected! The garment follows your body in real time.';
+    document.getElementById('overlay-garment').style.display = 'block';
+    startPose(video, canvas);
+  } catch(e) {
+    document.getElementById('loading-overlay').style.display = 'none';
+    showToast(e.name==='NotAllowedError'
+      ? 'Camera permission denied — please allow access.'
+      : 'Camera error: ' + e.message);
+  }
+}
+
+function stopCamera() {
+  poseRunning = false;
+  if (mpCam) { try { mpCam.stop(); } catch(e){} mpCam = null; }
+  if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; }
+  const video = document.getElementById('webcam');
+  video.srcObject = null; video.style.display = 'none';
+  document.getElementById('overlay-garment').style.display = 'none';
+  document.getElementById('camera-placeholder').style.display = 'flex';
+  document.getElementById('btn-start-cam').style.display = 'flex';
+  document.getElementById('btn-stop-cam').style.display = 'none';
+  document.getElementById('canvas-overlay').getContext('2d').clearRect(0,0,9999,9999);
+  document.getElementById('tryon-tip').textContent = 'Camera stopped. Start again to try on clothes.';
+}
+
+// ── Per-garment fine-tune offsets (adjust these to taste) ──
+// Each entry: { wMult, topOffsetRatio, heightMult }
+//   wMult          – garment width as a multiple of shoulder-width
+//   topOffsetRatio – how far above the shoulder-midpoint to start (fraction of garment height)
+//   heightMult     – garment height as a multiple of torso-height
+const GARMENT_TUNE = {
+  'shirt':   { wMult: 1.55, topOffsetRatio: 0.08, heightMult: 1.10 },
+  'hoodie':  { wMult: 1.65, topOffsetRatio: 0.10, heightMult: 1.15 },
+  't-shirt': { wMult: 1.50, topOffsetRatio: 0.07, heightMult: 1.05 },
+};
+
+function startPose(video, canvas) {
+  if (typeof Pose === 'undefined') { fallbackOverlay(); return; }
+  const ctx = canvas.getContext('2d');
+  const stage = document.getElementById('camera-view');
+
+  // Smoothing buffers
+  let smLeft=0, smTop=0, smW=0, smH=0, smRot=0, first=true;
+  const ALPHA = 0.30; // lower = smoother but more lag
+
+  const pose = new Pose({
+    locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675469404/${f}`
+  });
+  pose.setOptions({
+    modelComplexity: 1, smoothLandmarks: true, enableSegmentation: false,
+    minDetectionConfidence: 0.55, minTrackingConfidence: 0.55
+  });
+
+  pose.onResults(results => {
+    if (!poseRunning) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!results.poseLandmarks || !selectedTryon) return;
+
+    const lm = results.poseLandmarks;
+
+    // Only draw skeleton if visibility is decent (less visual noise)
+    if (typeof drawConnectors !== 'undefined') {
+      drawConnectors(ctx, lm, POSE_CONNECTIONS, { color:'rgba(184,149,106,0.2)', lineWidth:1.5 });
+    }
+
+    const W = stage.offsetWidth, H = stage.offsetHeight;
+
+    // Landmarks (x is in [0,1] normalised; video is CSS-mirrored so we flip x)
+    const lm11 = lm[11], lm12 = lm[12]; // left / right shoulder
+    const lm23 = lm[23], lm24 = lm[24]; // left / right hip
+    const lm7  = lm[7],  lm8  = lm[8];  // left / right ear (for neck)
+
+    if (!lm11 || !lm12) return;
+    if ((lm11.visibility||0) < 0.4 || (lm12.visibility||0) < 0.4) return;
+
+    // Mirror-corrected pixel coords
+    const lsX = (1 - lm11.x) * W,  lsY = lm11.y * H;
+    const rsX = (1 - lm12.x) * W,  rsY = lm12.y * H;
+
+    const shoulderMidX = (lsX + rsX) / 2;
+    const shoulderMidY = (lsY + rsY) / 2;
+    const shoulderPxW  = Math.abs(lsX - rsX);
+    if (shoulderPxW < 20) return; // person too far / not detected well
+
+    // Shoulder tilt angle
+    const tiltRad = Math.atan2(rsY - lsY, rsX - lsX); // radians
+
+    // Hip mid Y – fall back to estimate if hips not visible
+    let hipMidY;
+    if (lm23 && lm24 && (lm23.visibility||0) > 0.3 && (lm24.visibility||0) > 0.3) {
+      hipMidY = ((lm23.y + lm24.y) / 2) * H;
+    } else {
+      hipMidY = shoulderMidY + shoulderPxW * 1.35; // estimated
+    }
+
+    // Neck Y – midpoint between ears gives a better collar anchor
+    let neckY;
+    if (lm7 && lm8 && (lm7.visibility||0) > 0.2 && (lm8.visibility||0) > 0.2) {
+      neckY = ((lm7.y + lm8.y) / 2) * H;
+    } else {
+      neckY = shoulderMidY - shoulderPxW * 0.18; // approx
+    }
+
+    // Torso height from shoulder to hip
+    const torsoH = hipMidY - shoulderMidY;
+
+    // Pick per-garment tune
+    const catKey = (selectedTryon.cat || 'shirt').toLowerCase();
+    const tune = GARMENT_TUNE[catKey] || GARMENT_TUNE['shirt'];
+
+    // Garment box size
+    const ovW = shoulderPxW * tune.wMult;
+
+    // Height: base is full torso + small hem below hips
+    const hemExtra = shoulderPxW * 0.18; // a bit of hem below hip
+    const ovH = (torsoH + hemExtra) * tune.heightMult;
+
+    // Garment top: start at neckline (just above shoulder mid)
+    const ovTop  = shoulderMidY - ovH * tune.topOffsetRatio;
+    const ovLeft = shoulderMidX - ovW / 2;
+
+    // Exponential smoothing
+    if (first) {
+      smLeft=ovLeft; smTop=ovTop; smW=ovW; smH=ovH; smRot=tiltRad; first=false;
+    } else {
+      smLeft = smLeft + ALPHA*(ovLeft-smLeft);
+      smTop  = smTop  + ALPHA*(ovTop-smTop);
+      smW    = smW    + ALPHA*(ovW-smW);
+      smH    = smH    + ALPHA*(ovH-smH);
+      smRot  = smRot  + ALPHA*(tiltRad-smRot);
+    }
+
+    const ov = document.getElementById('overlay-garment');
+    ov.style.left      = smLeft + 'px';
+    ov.style.top       = smTop  + 'px';
+    ov.style.width     = smW    + 'px';
+    ov.style.height    = smH    + 'px';
+    ov.style.transform = `rotate(${smRot}rad)`;
+  });
+
+  if (typeof Camera !== 'undefined') {
+    mpCam = new Camera(video, {
+      onFrame: async () => { if (poseRunning) await pose.send({ image: video }); },
+      width:1280, height:720
+    });
+    mpCam.start();
+  } else {
+    (async function loop() {
+      if (!poseRunning) return;
+      await pose.send({ image: video });
+      requestAnimationFrame(loop);
+    })();
+  }
+}
+
+function fallbackOverlay() {
+  const stage = document.getElementById('camera-view');
+  const ov = document.getElementById('overlay-garment');
+  let t = 0;
+  (function tick() {
+    if (!poseRunning) return;
+    t += 0.018;
+    const W = stage.offsetWidth, H = stage.offsetHeight;
+    // Better default: centre on upper torso, 42% width, starts at ~15% from top
+    const ovW = W * 0.42, ovH = H * 0.58;
+    ov.style.width     = ovW + 'px';
+    ov.style.height    = ovH + 'px';
+    ov.style.left      = (W/2 - ovW/2) + 'px';
+    ov.style.top       = (H * 0.14 + Math.sin(t) * 5) + 'px';
+    ov.style.transform = 'rotate(0rad)';
+    requestAnimationFrame(tick);
+  })();
+  document.getElementById('tryon-tip').textContent = '✨ Preview mode — full pose tracking loading…';
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── INIT ──
+document.getElementById('closet-count').textContent = closet.length;
+renderProducts();
+</script>
+</body>
+</html>
